@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>英雄难过棍子关</title>
+  <script src="../../jQuery/jquery-3.1.1.js"></script>
+     <script src="js/data.js"></script>
+  <script>
+
+   $(function(){
+    $(".btnClick").mousedown(function(){
+     var maxTop=$(".container").offset().top;
+        if(type){
+            $(".stick").animate({"width":maxTop+"px"},1000);
+        }
+    }).mouseup(function(){
+        $(".stick").stop();
+        if(type){
+            $(".stick").addClass("stickDown");
+            setTimeout(running,350);
+        }
+        type=false;
+   });
+       function running(){
+           var mW=$(".man").width();
+           var sW=$(".stick").width();
+           var sL=parseFloat($(".stick").css("left"));
+           $(".man img").attr("src","img/stick.gif");
+           $(".man").animate({"left":(sW+sL-mW/2)+"px"},1000);
+           setTimeout(standMan,1010);
+       }
+       function standMan(){
+           $(".man img").attr("src","img/stick_stand.png");
+//    判断是否成功
+//    获取当前墙的的左边距离，当前墙的宽度，下一个墙的左边距离
+           var sW=$(".stick").width();
+           var wW=$(".well:eq("+index+")").width();
+           var wL=parseFloat($(".well:eq("+index+")").css("left"));
+           var nwL=parseFloat($(".well:eq("+index+")").next().css("left"));
+           var nwW=parseFloat($(".well:eq("+index+")").next().width());
+           if(sW>=nwL-(wW+wL)&&sW<=nwL-(wW+wL)+nwW){
+//     alert("成功了");
+//        棍子初始化
+               $(".stick").css("left",(nwL+nwW)+"px").width(0).removeClass("stickDown");
+//        人要站在墙上
+               $(".man").css("left",(nwL+nwW-$(".man").width())+"px");
+               $(".container").animate({"left":"-"+nwL+"px"},1000,function(){
+                   index++;
+                   if(index==$(".well-box .well").length-1){
+                       createSuccess();
+                   }else{
+                       type=true;
+                   }
+               });
+           }else{
+                   $(".man img").addClass("rotate");
+                    createLose();
+           }
+       }
+   });
+
+  </script>
+  <link href="css/style.css" rel="stylesheet"/>
+  <!--<script src="js/index.js"></script>-->
+  <!--<script src="js/play.js"></script>-->
+ </head>
+ <body class="bg2">
+	<div class="set-text">
+		<h2 class="play-title">关卡1</h2>
+		<a href="index.html">主菜单</a>
+	</div>
+	<a href="javascript:void(0);" class="btnClick"></a>
+	<div class="container">
+		<div class="stick"></div>
+		<div class="man"><img src="img/stick_stand.png"/></div>
+		<div class="well-box">
+         <!--<div class="well" style="width: 100px;left:0px;"></div>-->
+         <!--<div class="well" style="width: 100px;left:200px;"></div>-->
+         <!--<div class="well" style="width: 100px;left:600px;"></div>-->
+         <!--<div class="well" style="width: 100px;left:900px;"></div>-->
+		</div>
+	</div>
+ </div>
+ </body>
+</html>
